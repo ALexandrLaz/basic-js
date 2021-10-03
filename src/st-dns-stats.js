@@ -23,6 +23,20 @@ import { NotImplementedError } from '../extensions/index.js';
  *
  */
 export default function getDNSStats(domains) {
-  let dom2 = domains.forEach(item => item.split("."));
-  console.log(dom2)
+  let domain = domains.map((item) => item.split('.').map((i)=> `.${i}`).reverse());
+  let map = new Map();
+  for(let i = 0; i < domain.length; i++) {
+
+    for(let j = 0; j < domain[i].length; j++) {
+      let key = domain[i].slice(0, j + 1).join('');
+
+      if(!map.has(key)){
+        map.set(key, 1);
+      } else {
+        map.set(key, map.get(key) + 1);
+      }
+    }
+  }
+
+  return Object.fromEntries(map);
 }
